@@ -4,12 +4,12 @@
   src,
 }:
 rustPlatform.buildRustPackage rec {
-  name = "steel-language-server";
+  name = "cargo-steel-lib";
   version = "0-unstable-2024-07-22";
 
   inherit src;
 
-  cargoBuildFlags = "-p steel-language-server";
+  cargoBuildFlags = "-p cargo-steel-lib";
   cargoLock = {
     lockFile = "${src}/Cargo.lock";
     outputHashes = {
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A language server for Steel";
+    description = "Cargo plugin to help with bootstrapping Steel";
     repository = "https://github.com/mattwparas/steel";
     license = with licenses; [mit asl20];
-    mainProgram = "steel-language-server";
+    mainProgram = "cargo-steel-lib";
     maintainers = with maintainers; [bddvlpr];
   };
 }

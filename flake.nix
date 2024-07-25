@@ -15,8 +15,9 @@
 
       perSystem = {pkgs, ...}: rec {
         packages = import ./pkgs {inherit pkgs;};
-
         checks = packages;
+
+        formatter = pkgs.alejandra;
       };
     };
 }

@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   src,
+  cargo-steel-lib,
 }:
 rustPlatform.buildRustPackage rec {
   name = "steel";
@@ -17,15 +18,24 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  postBuild = ''
-    mkdir -p $out/cogs
+  postInstall = ''
+    mkdir -p $out/{cogs,home}
+
+    # TODO: This will most likely be replaced with a 'buildSteelHome' function to allow passing cogs and their version(s).
+    substituteInPlace cogs/installer/download.scm --replace-warn "cargo-steel-lib" "${lib.getExe cargo-steel-lib}"
     cp -r cogs $out
+
+    export STEEL_HOME=$out/home
+    pushd cogs
+    $out/bin/steel install.scm
+    popd
   '';
 
   doCheck = false;
 
   meta = with lib; {
     description = "An embedded scheme interpreter in Rust";
+    repository = "https://github.com/mattwparas/steel";
     license = with licenses; [mit asl20];
     mainProgram = "steel";
     maintainers = with maintainers; [bddvlpr];
